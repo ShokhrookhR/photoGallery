@@ -9,7 +9,10 @@ function Collection({ name, photos }) {
       <img className="collection__big" src={photos[0]} alt="Item" />
       <div className="collection__bottom">
         {photos.map(
-          (img) => img !== photos[0] && <img className="collection__mini" src={img} alt="Item" />,
+          (img) =>
+            img !== photos[0] && (
+              <img className="collection__mini" src={img} alt="Item" key={img} />
+            ),
         )}
       </div>
       <h4>{name}</h4>
@@ -40,7 +43,7 @@ function App() {
         <ul className="tags">
           {data.categories.map((cat, i) => (
             <li
-              key={cat}
+              key={cat.name}
               onClick={() => onChangeCategory(cat, i)}
               className={category === cat ? 'active' : ''}>
               {cat.name}
@@ -59,12 +62,14 @@ function App() {
           .filter((obj) => obj.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
           .filter((obj) => (categoryId === 0 ? obj : obj.category === categoryId))
           .map((obj) => (
-            <Collection {...obj} />
+            <Collection {...obj} key={obj.name} />
           ))}
       </div>
       <ul className="pagination">
         {pagination.map((p) => (
-          <li className={p === Math.round(pagination.length / 2) ? 'active' : ''}>{p}</li>
+          <li key={p} className={p === Math.round(pagination.length / 2) ? 'active' : ''}>
+            {p}
+          </li>
         ))}
       </ul>
     </div>
