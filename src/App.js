@@ -19,30 +19,48 @@ function Collection({ name, photos }) {
 
 function App() {
   const [category, setCategory] = React.useState('Все');
-  const onChangeCategory = (cat) => {
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [searchValue, setSearchValue] = React.useState('');
+  const onChangeCategory = (cat, id) => {
     setCategory(cat);
+    setCategoryId(id);
   };
+  const onChangeSearch = (event) => {
+    setSearchValue(event.target.value);
+  };
+  React.useEffect(() => {
+    setCategoryId(categoryId);
+  }, [categoryId]);
+  console.log(categoryId);
 
   return (
     <div className="App">
       <h1>Моя коллекция фотографий</h1>
       <div className="top">
         <ul className="tags">
-          {data.categories.map((cat) => (
+          {data.categories.map((cat, i) => (
             <li
               key={cat}
-              onClick={() => onChangeCategory(cat)}
+              onClick={() => onChangeCategory(cat, i)}
               className={category === cat ? 'active' : ''}>
               {cat.name}
             </li>
           ))}
         </ul>
-        <input className="search-input" placeholder="Поиск по названию" />
+        <input
+          value={searchValue}
+          onChange={(e) => onChangeSearch(e)}
+          className="search-input"
+          placeholder="Поиск по названию"
+        />
       </div>
       <div className="content">
-        {data.collections.map((obj) => (
-          <Collection {...obj} />
-        ))}
+        {data.collections
+          .filter((obj) => obj.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+          .filter((obj) => (categoryId === 0 ? obj : obj.category === categoryId))
+          .map((obj) => (
+            <Collection {...obj} />
+          ))}
       </div>
       <ul className="pagination">
         {pagination.map((p) => (
