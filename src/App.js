@@ -1,6 +1,9 @@
 import React from 'react';
 import './index.scss';
 
+const categories = ['Все', 'Горы', 'Море', 'Архитектура', 'Города'];
+const pagination = [1, 2, 3];
+
 function Collection({ name, images }) {
   return (
     <div className="collection">
@@ -16,16 +19,24 @@ function Collection({ name, images }) {
 }
 
 function App() {
+  const [category, setCategory] = React.useState('Все');
+  const onChangeCategory = (cat) => {
+    setCategory(cat);
+  };
+
   return (
     <div className="App">
       <h1>Моя коллекция фотографий</h1>
       <div className="top">
         <ul className="tags">
-          <li className="active">Все</li>
-          <li>Горы</li>
-          <li>Море</li>
-          <li>Архитектура</li>
-          <li>Города</li>
+          {categories.map((cat) => (
+            <li
+              key={cat}
+              onClick={() => onChangeCategory(cat)}
+              className={category === cat ? 'active' : ''}>
+              {cat}
+            </li>
+          ))}
         </ul>
         <input className="search-input" placeholder="Поиск по названию" />
       </div>
@@ -41,9 +52,9 @@ function App() {
         />
       </div>
       <ul className="pagination">
-        <li>1</li>
-        <li className="active">2</li>
-        <li>3</li>
+        {pagination.map((p) => (
+          <li className={p === Math.round(pagination.length / 2) ? 'active' : ''}>{p}</li>
+        ))}
       </ul>
     </div>
   );
