@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.scss';
 import data from './assets/data.json';
-const pagination = [1, 2, 3];
+
 
 function Collection({ name, photos }) {
   return (
@@ -21,11 +21,12 @@ function Collection({ name, photos }) {
 }
 
 function App() {
-  const [category, setCategory] = React.useState('Все');
+  const [category, setCategory] = React.useState(0);
   const [categoryId, setCategoryId] = React.useState(0);
   const [searchValue, setSearchValue] = React.useState('');
-  const onChangeCategory = (cat, id) => {
-    setCategory(cat);
+  const [page, setPage] = React.useState(1);
+  const onChangeCategory = (id) => {
+    setCategory(id);
     setCategoryId(id);
   };
   const onChangeSearch = (event) => {
@@ -44,8 +45,8 @@ function App() {
           {data.categories.map((cat, i) => (
             <li
               key={cat.name}
-              onClick={() => onChangeCategory(cat, i)}
-              className={category === cat ? 'active' : ''}>
+              onClick={() => onChangeCategory(i)}
+              className={categoryId === i ? 'active' : ''}>
               {cat.name}
             </li>
           ))}
@@ -65,13 +66,13 @@ function App() {
             <Collection {...obj} key={obj.name} />
           ))}
       </div>
-      <ul className="pagination">
-        {pagination.map((p) => (
-          <li key={p} className={p === Math.round(pagination.length / 2) ? 'active' : ''}>
-            {p}
+      {/* <ul className="pagination">
+        {[...Array(4)].map((_, i) => (
+          <li key={i} onClick={() => setPage(i + 1)} className={page === i + 1 ? 'active' : ''}>
+            {i + 1}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }
